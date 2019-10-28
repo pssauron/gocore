@@ -1,4 +1,4 @@
-module github.com/pssauron/gocore/stores
+module github.com/pssauron/gocore
 
 go 1.13
 
