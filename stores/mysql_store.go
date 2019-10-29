@@ -8,6 +8,7 @@
 package stores
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 
@@ -20,7 +21,7 @@ const (
 )
 
 type MyStore struct {
-	*sqlx.DB
+	db *sqlx.DB
 }
 
 type MyStoreConf struct {
@@ -43,6 +44,18 @@ func NewMyStore(conf MyStoreConf) *MyStore {
 		panic(errors.New("获取MYSQL连接异常"))
 	}
 
-	return &MyStore{DB: db}
+	return &MyStore{db: db}
 
+}
+
+func (m *MyStore) BeginTx() (*sql.Tx, error) {
+	return m.db.Begin()
+}
+
+func (m *MyStore) RollBack(tx *sql.Tx) error {
+	return tx.Rollback()
+}
+
+func (m *MyStore) Commit(tx *sql.Tx) error {
+	return tx.Rollback()
 }
