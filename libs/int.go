@@ -25,7 +25,12 @@ func NewInt(i int) Int {
 	return ii
 }
 
-func (i Int) IsNil() bool {
+func (i *Int) Set(value int) {
+	i.i.Int64 = int64(value)
+	i.i.Valid = true
+}
+
+func (i Int) IsEmpty() bool {
 	return i.i.Valid
 }
 

@@ -17,7 +17,7 @@ import (
 
 //EncodePassword 创建Password
 func EncodePassword(password string) string {
-	en, _ := bcrypt.GenerateFromPassword([]byte(passwd), bcrypt.DefaultCost)
+	en, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return base64.StdEncoding.EncodeToString(en)
 }
 

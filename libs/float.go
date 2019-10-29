@@ -26,7 +26,7 @@ func NewFloat(value float64) Float {
 	return f
 }
 
-func (f Float) isNil() bool {
+func (f Float) IsEmpty() bool {
 	return f.f.Valid
 }
 

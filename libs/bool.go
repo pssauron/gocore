@@ -26,7 +26,7 @@ func NewBool(value bool) Bool {
 	return b
 }
 
-func (b Bool) IsNil() bool {
+func (b Bool) IsEmpty() bool {
 	return b.b.Valid
 }
 

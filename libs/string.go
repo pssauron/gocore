@@ -24,6 +24,12 @@ func NewString(value string) String {
 	s.s.String = value
 	return s
 }
+
+func (s *String) Set(value string) {
+	s.s.String = value
+	s.s.Valid = true
+}
+
 func (s *String) Scan(value interface{}) error {
 	return s.s.Scan(value)
 }
@@ -58,7 +64,7 @@ func (s String) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.s.String)
 }
 
-func (s String) IsNil() bool {
+func (s String) IsEmpty() bool {
 	return !s.s.Valid || s.s.String == ""
 }
 

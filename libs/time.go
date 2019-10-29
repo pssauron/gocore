@@ -29,7 +29,7 @@ func NewTime(time time.Time) Time {
 	return t
 }
 
-func (t Time) IsNil() bool {
+func (t Time) IsEmpty() bool {
 	return !t.t.Valid || t.t.Time == time.Unix(0, 0)
 }
 

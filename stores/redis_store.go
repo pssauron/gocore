@@ -20,7 +20,7 @@ type RedisStore struct {
 }
 
 //newRedisStorage 实例化redis
-func NewRedisStore(addr string, db, idle, active int) *RedisStorage {
+func NewRedisStore(addr string, db, idle, active int) *RedisStore {
 	client := &redis.Pool{
 		Dial: func() (conn redis.Conn, e error) {
 			c, err := redis.Dial("tcp", addr)
