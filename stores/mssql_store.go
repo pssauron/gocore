@@ -22,11 +22,11 @@ type MSStore struct {
 
 func NewMSStore(conf StoreConf) *MSStore {
 
-	lk := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", conf.User, conf.Password, conf.IP, conf.Port, conf.DBName)
+	u := fmt.Sprintf("server=%s;port=%s;user id=%s;password=%s;database=%s;encrypt=disable", conf.IP, conf.Port, conf.User, conf.Password, conf.DBName)
 
-	lk += `?parseTime=true`
+	fmt.Println(u)
 
-	db, err := sqlx.Connect(MysqlDialect, lk)
+	db, err := sqlx.Open("mssql", u)
 
 	if err != nil {
 		panic(errors.New("获取SQL连接异常"))
