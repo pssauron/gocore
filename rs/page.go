@@ -21,8 +21,8 @@ func NewPageData(page, size int) *PageData {
 	return &PageData{
 		Page:   libs.NewInt(page),
 		Size:   libs.NewInt(size),
-		Totals: libs.Int{},
-		Pages:  libs.Int{},
+		Totals: libs.NewInt(0),
+		Pages:  libs.NewInt(0),
 		Data:   nil,
 	}
 }

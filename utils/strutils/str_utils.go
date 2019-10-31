@@ -11,6 +11,7 @@ import (
 	"encoding/base64"
 	"regexp"
 	"strings"
+	"unicode"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -83,4 +84,46 @@ func Match(str string, exp string) bool {
 
 	return reg.Match([]byte(str))
 
+}
+
+func ToSnakeCase(str string) string {
+
+	var snake string
+
+	for k, v := range str {
+		if k == 0 {
+			snake = strings.ToLower(string(str[0]))
+		} else {
+			if unicode.IsUpper(rune(v)) {
+				snake += "_" + strings.ToLower(string(v))
+			}
+			snake += strings.ToLower(string(v))
+		}
+
+	}
+	return snake
+}
+
+func ToCamelCase(str string) string {
+	var camel string
+	var toUpper bool
+	str = strings.TrimLeft(str, "_")
+
+	for k, v := range str {
+		if k == 0 {
+			camel = strings.ToUpper(string(v))
+		} else {
+			if v == '_' {
+				toUpper = true
+			} else {
+				if toUpper {
+					camel += strings.ToUpper(string(v))
+					toUpper = false
+				} else {
+					camel += string(v)
+				}
+			}
+		}
+	}
+	return camel
 }

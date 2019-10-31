@@ -27,7 +27,7 @@ func NewBool(value bool) Bool {
 }
 
 func (b Bool) IsEmpty() bool {
-	return b.b.Valid
+	return !b.b.Valid
 }
 
 func (b Bool) Get() bool {

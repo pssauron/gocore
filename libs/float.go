@@ -27,7 +27,7 @@ func NewFloat(value float64) Float {
 }
 
 func (f Float) IsEmpty() bool {
-	return f.f.Valid
+	return !f.f.Valid
 }
 
 func (f Float) Get() float64 {

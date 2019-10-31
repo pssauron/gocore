@@ -31,7 +31,7 @@ func (i *Int) Set(value int) {
 }
 
 func (i Int) IsEmpty() bool {
-	return i.i.Valid
+	return !i.i.Valid
 }
 
 func (i Int) Get() int {

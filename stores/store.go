@@ -9,6 +9,9 @@ package stores
 import (
 	"errors"
 	"reflect"
+	"strings"
+
+	"github.com/pssauron/gocore/utils/strutils"
 
 	"github.com/pssauron/gocore/libs"
 )
@@ -22,7 +25,7 @@ type Table interface {
 	TableName() string
 }
 
-type Field struct {
+type field struct {
 	*reflect.StructField
 	IsPrimary bool
 	IsEmpty   bool
@@ -30,8 +33,15 @@ type Field struct {
 	Value     interface{}
 }
 
+type sqlStruct struct {
+	cols []string      //列名称
+	args []interface{} //参数值
+	pcol string        //主键列名
+	pval interface{}   //主键列值
+}
+
 //获取Bean 中所有的Field
-func GetDBFields(bean interface{}) ([]Field, error) {
+func getDBFields(bean interface{}) ([]field, error) {
 
 	t := reflect.TypeOf(bean)
 
@@ -40,9 +50,9 @@ func GetDBFields(bean interface{}) ([]Field, error) {
 	return getFields(t, v)
 }
 
-func getFields(t reflect.Type, v reflect.Value) ([]Field, error) {
+func getFields(t reflect.Type, v reflect.Value) ([]field, error) {
 
-	fs := make([]Field, 0)
+	fs := make([]field, 0)
 
 	if t.Kind() == reflect.Ptr {
 		return getFields(t.Elem(), v)
@@ -83,12 +93,12 @@ func getFields(t reflect.Type, v reflect.Value) ([]Field, error) {
 				mpt = fv.IsZero()
 			}
 
-			f := Field{}
+			f := field{}
 			f.StructField = &sf
 			f.Name = sf.Name
 			f.Col = cn
 			f.Value = v.FieldByName(sf.Name).Interface()
-			f.IsPrimary = f.Tag.Get(primaryTag) == "true"
+			f.IsPrimary = strings.ToUpper(f.Tag.Get(primaryTag)) == strings.ToUpper("true")
 			f.IsEmpty = mpt
 			fs = append(fs, f)
 		}
@@ -96,4 +106,74 @@ func getFields(t reflect.Type, v reflect.Value) ([]Field, error) {
 	}
 
 	return fs, nil
+}
+
+func getSqlStruct(fields []field) (*sqlStruct, error) {
+
+	ss := sqlStruct{
+		cols: make([]string, 0),
+		args: make([]interface{}, 0),
+		pcol: "",
+	}
+
+	for _, item := range fields {
+		if item.IsPrimary {
+			ss.pcol = item.Col
+			ss.pval = item.Value
+
+		}
+		if !item.IsEmpty {
+			ss.cols = append(ss.cols, item.Col)
+			ss.args = append(ss.args, item.Value)
+		}
+
+	}
+
+	return &ss, nil
+}
+
+func getTableName(bean interface{}) string {
+	if table, ok := bean.(Table); ok {
+		return table.TableName()
+	}
+	t := reflect.TypeOf(bean)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+	return strutils.ToSnakeCase(t.Name())
+
+}
+
+func setValue(bean interface{}, value int64) error {
+	fs, err := getDBFields(bean)
+	if err != nil {
+		return err
+	}
+	k, tp, err := getPrimary(fs)
+	if err != nil {
+		return err
+	}
+	v := reflect.Indirect(reflect.ValueOf(bean))
+
+	switch tp.Type.String() {
+	case "libs.Int":
+		v.FieldByName(k).Set(reflect.ValueOf(libs.NewInt(int(value))))
+	case "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64":
+		v.FieldByName(k).SetInt(value)
+	default:
+		return errors.New("unsupported auto increment value")
+	}
+	return nil
+}
+
+func getPrimary(fs []field) (string, *reflect.StructField, error) {
+
+	for _, item := range fs {
+		if item.IsPrimary {
+			return item.Name, item.StructField, nil
+		}
+	}
+
+	return "", nil, errors.New("no primary key")
+
 }

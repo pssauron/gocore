@@ -8,54 +8,67 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/pssauron/gocore/libs"
 	"github.com/pssauron/gocore/stores"
 )
 
-type Child struct {
-	F string `db:"fs"`
-	G int    `db:"gs"`
+type SysLogin struct {
+	LoginID   libs.Int    `db:"LoginID" json:"loginId" primary:"true"`
+	UserAcct  libs.String `db:"UserAcct" json:"userAcct"`
+	Mobile    libs.String `db:"Mobile" json:"mobile"`
+	Password  libs.String `db:"Password" json:"password"`
+	RegDate   libs.Time   `db:"RegDate" json:"regDate"`
+	LoginIP   libs.String `db:"LoginIP" json:"loginIp"`
+	LoginTime libs.Time   `db:"LoginTime" json:"loginTime"`
+	DR        libs.Bool   `db:"DR" json:"dr"`
 }
 
-type Test struct {
-	A *libs.Int   `db:"A"`
-	B libs.String `db:"B"`
-	Child
-}
-
-type UA struct {
-	C libs.Bool `db:"C"`
-	D libs.Time `db:"D"`
-	*Test
+func (SysLogin) TableName() string {
+	return "SysLogin"
 }
 
 func main() {
-	a := new(libs.Int)
-	a.Set(1)
-	t := UA{
-		C: libs.NewBool(true),
-		D: libs.NewTime(time.Now()),
-		Test: &Test{
-			A: a,
-			B: libs.String{},
-			Child: Child{
-				F: "sss",
-				G: 0,
-			},
-		},
+
+	conf := stores.MyStoreConf{
+		IP:       "192.168.0.110",
+		Port:     "3306",
+		User:     "root",
+		Password: "123456",
+		DBName:   "yunlian-platform",
 	}
-	fs, err := stores.GetDBFields(t)
+
+	db := stores.NewMyStore(conf)
+	//login := &SysLogin{
+	//	LoginID:  libs.NewInt(100058),
+	//	UserAcct: libs.NewString("aaaaaassss"),
+	//	Mobile:   libs.NewString("18682331124"),
+	//	Password: libs.NewString("222222"),
+	//}
+	//err := db.Update(login)
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//}
+	list := make([]SysLogin, 0)
+
+	//err := db.Query(&list, "select * from SysLogin")
+	//
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//}
+	//
+	//fmt.Println(len(list))
+
+	pagedata, err := db.QueryPage(&list, "select * from SysLogin", 1, 2)
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println(err.Error())
 	}
 
-	for _, item := range fs {
-		fmt.Printf("%s:%s:%v", item.Name, item.Col, item.IsEmpty)
-		fmt.Println()
-	}
+	bs, err := json.Marshal(pagedata)
+
+	fmt.Println(string(bs))
+
 }
