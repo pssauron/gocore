@@ -29,15 +29,7 @@ type MyStore struct {
 	db *sqlx.DB
 }
 
-type MyStoreConf struct {
-	IP       string `json:"ip" yaml:"ip"`
-	Port     string `json:"port" yaml:"port"`
-	User     string `json:"user" yaml:"user"`
-	Password string `json:"password" yaml:"password"`
-	DBName   string `json:"dbName" yaml:"dbName"`
-}
-
-func NewMyStore(conf MyStoreConf) *MyStore {
+func NewMyStore(conf StoreConf) *MyStore {
 
 	lk := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", conf.User, conf.Password, conf.IP, conf.Port, conf.DBName)
 

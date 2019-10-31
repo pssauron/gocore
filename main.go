@@ -73,4 +73,10 @@ func main() {
 
 	fmt.Println(strutils.ToSnakeCase("SysLogin"))
 
+	fmt.Println(strutils.ToCamelCase("sys_login"))
+
+	fmt.Println(strutils.ToCamelCase("_sys_login"))
+
+	fmt.Println(strutils.ToCamelCase("__sys_login"))
+
 }

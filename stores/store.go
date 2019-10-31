@@ -25,6 +25,14 @@ type Table interface {
 	TableName() string
 }
 
+type StoreConf struct {
+	IP       string `json:"ip" yaml:"ip"`
+	Port     string `json:"port" yaml:"port"`
+	User     string `json:"user" yaml:"user"`
+	Password string `json:"password" yaml:"password"`
+	DBName   string `json:"dbName" yaml:"dbName"`
+}
+
 type field struct {
 	*reflect.StructField
 	IsPrimary bool
