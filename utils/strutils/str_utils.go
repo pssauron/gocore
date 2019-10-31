@@ -96,8 +96,10 @@ func ToSnakeCase(str string) string {
 		} else {
 			if unicode.IsUpper(rune(v)) {
 				snake += "_" + strings.ToLower(string(v))
+			} else {
+				snake += strings.ToLower(string(v))
 			}
-			snake += strings.ToLower(string(v))
+
 		}
 
 	}

@@ -8,11 +8,11 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 
+	"github.com/pssauron/gocore/utils/strutils"
+
 	"github.com/pssauron/gocore/libs"
-	"github.com/pssauron/gocore/stores"
 )
 
 type SysLogin struct {
@@ -32,15 +32,15 @@ func (SysLogin) TableName() string {
 
 func main() {
 
-	conf := stores.MyStoreConf{
-		IP:       "192.168.0.110",
-		Port:     "3306",
-		User:     "root",
-		Password: "123456",
-		DBName:   "yunlian-platform",
-	}
+	//conf := stores.MyStoreConf{
+	//	IP:       "192.168.0.110",
+	//	Port:     "3306",
+	//	User:     "root",
+	//	Password: "123456",
+	//	DBName:   "yunlian-platform",
+	//}
 
-	db := stores.NewMyStore(conf)
+	//db := stores.NewMyStore(conf)
 	//login := &SysLogin{
 	//	LoginID:  libs.NewInt(100058),
 	//	UserAcct: libs.NewString("aaaaaassss"),
@@ -51,7 +51,7 @@ func main() {
 	//if err != nil {
 	//	fmt.Println(err.Error())
 	//}
-	list := make([]SysLogin, 0)
+	//list := make([]SysLogin, 0)
 
 	//err := db.Query(&list, "select * from SysLogin")
 	//
@@ -61,14 +61,16 @@ func main() {
 	//
 	//fmt.Println(len(list))
 
-	pagedata, err := db.QueryPage(&list, "select * from SysLogin", 1, 2)
+	//pagedata, err := db.QueryPage(&list, "select * from SysLogin", 1, 2)
+	//
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//}
+	//
+	//bs, err := json.Marshal(pagedata)
+	//
+	//fmt.Println(string(bs))
 
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	bs, err := json.Marshal(pagedata)
-
-	fmt.Println(string(bs))
+	fmt.Println(strutils.ToSnakeCase("SysLogin"))
 
 }
