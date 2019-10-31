@@ -16,7 +16,7 @@ import (
 
 //MSStore sql server Store
 type MSStore struct {
-	db *sqlx.DB
+	*sqlx.DB
 }
 
 func NewMSStore(conf StoreConf) *MSStore {
@@ -28,9 +28,9 @@ func NewMSStore(conf StoreConf) *MSStore {
 	db, err := sqlx.Connect(MysqlDialect, lk)
 
 	if err != nil {
-		panic(errors.New("获取MYSQL连接异常"))
+		panic(errors.New("获取SQL连接异常"))
 	}
 
-	return &MSStore{db: db}
+	return &MSStore{DB: db}
 
 }
