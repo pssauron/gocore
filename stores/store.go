@@ -33,6 +33,13 @@ type StoreConf struct {
 	DBName   string `json:"dbName" yaml:"dbName"`
 }
 
+type RedisConf struct {
+	Addr   string `json:"addr" yaml:"addr"`
+	DB     int    `json:"db" yaml:"db"`
+	Idle   int    `json:"idle" yaml:"idle"`
+	Active int    `json:"active" yaml:"active"`
+}
+
 type field struct {
 	*reflect.StructField
 	IsPrimary bool

@@ -20,16 +20,16 @@ type RedisStore struct {
 }
 
 //newRedisStorage 实例化redis
-func NewRedisStore(addr string, db, idle, active int) *RedisStore {
+func NewRedisStore(conf *RedisConf) *RedisStore {
 	client := &redis.Pool{
 		Dial: func() (conn redis.Conn, e error) {
-			c, err := redis.Dial("tcp", addr)
+			c, err := redis.Dial("tcp", conf.Addr)
 
 			if err != nil {
 				panic(err)
 			}
 
-			_, err = c.Do("SELECT", db)
+			_, err = c.Do("SELECT", conf.DB)
 
 			if err != nil {
 				panic(err)
@@ -44,8 +44,8 @@ func NewRedisStore(addr string, db, idle, active int) *RedisStore {
 			}
 			return err
 		},
-		MaxIdle:     idle,
-		MaxActive:   active,
+		MaxIdle:     conf.Idle,
+		MaxActive:   conf.Active,
 		IdleTimeout: 300 * time.Second,
 	}
 
