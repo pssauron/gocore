@@ -20,7 +20,7 @@ type MSStore struct {
 	*sqlx.DB
 }
 
-func NewMSStore(conf StoreConf) *MSStore {
+func NewMSStore(conf *StoreConf) *MSStore {
 
 	u := fmt.Sprintf("server=%s;port=%s;user id=%s;password=%s;database=%s;encrypt=disable", conf.IP, conf.Port, conf.User, conf.Password, conf.DBName)
 
