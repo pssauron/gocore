@@ -29,7 +29,7 @@ type MyStore struct {
 	db *sqlx.DB
 }
 
-func NewMyStore(conf StoreConf) *MyStore {
+func NewMyStore(conf *StoreConf) *MyStore {
 
 	lk := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", conf.User, conf.Password, conf.IP, conf.Port, conf.DBName)
 
