@@ -33,5 +33,4 @@ func NewMSStore(conf *StoreConf) *MSStore {
 	}
 
 	return &MSStore{DB: db}
-
 }

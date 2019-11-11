@@ -41,6 +41,9 @@ func NewMyStore(conf *StoreConf) *MyStore {
 		panic(errors.New("获取MYSQL连接异常"))
 	}
 
+	db.SetMaxIdleConns(conf.Idle)
+	db.SetMaxIdleConns(conf.Active)
+
 	return &MyStore{db: db}
 
 }

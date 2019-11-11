@@ -31,6 +31,8 @@ type StoreConf struct {
 	User     string `json:"user" yaml:"user"`
 	Password string `json:"password" yaml:"password"`
 	DBName   string `json:"dbName" yaml:"dbName"`
+	Idle     int    `json:"idle" yaml:"idle"`
+	Active   int    `json:"active" yaml:"active"`
 }
 
 type RedisConf struct {

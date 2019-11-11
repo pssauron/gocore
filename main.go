@@ -89,7 +89,7 @@ func main() {
 		DBName:   "AIS201407281401391",
 	}
 
-	msconn := stores.NewMSStore(conf)
+	msconn := stores.NewMSStore(&conf)
 
 	var count int
 	err := msconn.DB.Get(&count, "select count(*) from t_SubSys ")

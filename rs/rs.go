@@ -7,10 +7,30 @@
 
 package rs
 
+import (
+	"fmt"
+)
+
 const (
 	Success    = 0
 	SuccessMsg = "调用成功"
 )
+
+type ApiErr struct {
+	ErrCode    int    `json:"errCode"`
+	ErrMessage string `json:"errMessage"`
+}
+
+func NewApiErr(code int, message string) *ApiErr {
+	return &ApiErr{
+		ErrCode:    code,
+		ErrMessage: message,
+	}
+}
+
+func (e ApiErr) Error() string {
+	return fmt.Sprintf("API异常【%d】%s", e.ErrCode, e.ErrMessage)
+}
 
 type Result struct {
 	ErrCode    int         `json:"errCode"`
