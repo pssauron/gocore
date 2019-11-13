@@ -11,6 +11,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
+	"errors"
 	"time"
 )
 
@@ -63,19 +64,40 @@ func (t Time) MarshalJSON() ([]byte, error) {
 }
 
 func (t *Time) UnmarshalJSON(data []byte) error {
-	var value *time.Time
+	var value interface{}
+
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
 
-	t.t.Valid = value != nil
-	if value == nil {
-		t.t.Time = time.Unix(0, 0)
+	switch value.(type) {
+	case string:
+		return t.UnmarshalText([]byte(value.(string)))
+	case nil:
+		t.t.Time = time.Time{}
+		t.t.Valid = false
 		return nil
+	default:
+		return errors.New("不支持的序列化类型")
 	}
-
-	t.t.Time = *value
 
 	return nil
 
+}
+
+//UnmarshalText json 反序列化
+func (t *Time) UnmarshalText(text []byte) error {
+	str := string(text)
+	if str == "" || str == "null" {
+		t.t.Valid = false
+		return nil
+	}
+	tt, err := time.Parse(timeFormat, str)
+
+	if err != nil {
+		return err
+	}
+	t.t.Time = tt
+	t.t.Valid = true
+	return nil
 }

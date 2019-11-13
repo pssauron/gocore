@@ -15,6 +15,7 @@ import (
 	"fmt"
 )
 
+//对应基础类型 bool
 type Bool struct {
 	b sql.NullBool
 }

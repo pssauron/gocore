@@ -15,6 +15,7 @@ import (
 	"fmt"
 )
 
+// float32 float64 float16 float8
 type Float struct {
 	f sql.NullFloat64
 }
