@@ -26,7 +26,7 @@ func NewMSStore(conf *StoreConf) *MSStore {
 
 	fmt.Println(u)
 
-	db, err := sqlx.Open("mssql", u)
+	db, err := sqlx.Open("sqlserver", u)
 
 	if err != nil {
 		panic(errors.New("获取SQL连接异常"))
