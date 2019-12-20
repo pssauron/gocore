@@ -25,7 +25,7 @@ type Table interface {
 	TableName() string
 }
 
-type StoreConf struct {
+type DBStoreConf struct {
 	IP       string `json:"ip" yaml:"ip"`
 	Port     string `json:"port" yaml:"port"`
 	User     string `json:"user" yaml:"user"`
@@ -137,7 +137,6 @@ func getSqlStruct(fields []field) (*sqlStruct, error) {
 		if item.IsPrimary {
 			ss.pcol = item.Col
 			ss.pval = item.Value
-
 		}
 		if !item.IsEmpty {
 			ss.cols = append(ss.cols, item.Col)

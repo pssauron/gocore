@@ -44,7 +44,6 @@ func (e *Ext) Scan(val interface{}) error {
 		return errors.New("scan 拓展字段 Ext 异常")
 	}
 
-	return nil
 }
 
 func (e Ext) Value() (driver.Value, error) {

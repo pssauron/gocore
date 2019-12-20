@@ -80,9 +80,6 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 	default:
 		return errors.New("不支持的序列化类型")
 	}
-
-	return nil
-
 }
 
 //UnmarshalText json 反序列化

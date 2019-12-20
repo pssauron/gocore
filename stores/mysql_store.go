@@ -29,7 +29,7 @@ type MyStore struct {
 	db *sqlx.DB
 }
 
-func NewMyStore(conf *StoreConf) *MyStore {
+func NewMyStore(conf *DBStoreConf) *MyStore {
 
 	lk := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", conf.User, conf.Password, conf.IP, conf.Port, conf.DBName)
 
@@ -66,6 +66,14 @@ func (m *MyStore) Commit(tx *sql.Tx) error {
 
 func (m *MyStore) Exec(query string, args ...interface{}) (sql.Result, error) {
 	return m.db.Exec(query, args...)
+}
+
+func (m *MyStore) ExecTx(tx *sql.Tx, query string, args ...interface{}) (sql.Result, error) {
+	r, err := tx.Exec(query, args)
+	if err != nil {
+		tx.Rollback()
+	}
+	return r, err
 }
 
 func (m *MyStore) Query(dest interface{}, sql string, args ...interface{}) error {

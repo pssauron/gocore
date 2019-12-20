@@ -10,11 +10,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/pssauron/gocore/stores"
-
-	"github.com/pssauron/gocore/utils/strutils"
-
 	"github.com/pssauron/gocore/libs"
+	"github.com/pssauron/gocore/math"
 )
 
 type SysLogin struct {
@@ -73,31 +70,8 @@ func main() {
 	//
 	//fmt.Println(string(bs))
 
-	fmt.Println(strutils.ToSnakeCase("SysLogin"))
+	s := `100`
 
-	fmt.Println(strutils.ToCamelCase("sys_login"))
-
-	fmt.Println(strutils.ToCamelCase("_sys_login"))
-
-	fmt.Println(strutils.ToCamelCase("__sys_login"))
-
-	conf := stores.StoreConf{
-		IP:       "47.107.101.69",
-		Port:     "1433",
-		User:     "sa",
-		Password: "sa@123",
-		DBName:   "AIS201407281401391",
-	}
-
-	msconn := stores.NewMSStore(&conf)
-
-	var count int
-	err := msconn.DB.Get(&count, "select count(*) from t_SubSys ")
-
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println(count)
+	fmt.Println(math.Calculation(s))
 
 }
