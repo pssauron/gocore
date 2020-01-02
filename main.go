@@ -10,8 +10,9 @@ package main
 import (
 	"fmt"
 
+	"github.com/pssauron/gocore/stores"
+
 	"github.com/pssauron/gocore/libs"
-	"github.com/pssauron/gocore/math"
 )
 
 type SysLogin struct {
@@ -31,13 +32,31 @@ func (SysLogin) TableName() string {
 
 func main() {
 
-	//conf := stores.MyStoreConf{
-	//	IP:       "192.168.0.110",
-	//	Port:     "3306",
-	//	User:     "root",
-	//	Password: "123456",
-	//	DBName:   "yunlian-platform",
-	//}
+	conf := stores.DBStoreConf{
+		IP:       "192.168.3.11",
+		Port:     "1433",
+		User:     "sa",
+		Password: "123",
+		DBName:   "POND",
+	}
+
+	db := stores.NewMSStore(&conf)
+
+	stmt, err := db.Preparex(`declare @cid nvarchar(20)
+	exec GetID '','bd','' , @cid OUTPUT
+	select @cid`)
+
+	if err != nil {
+		panic(err)
+	}
+	var id string
+	err = stmt.QueryRow().Scan(&id)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(id)
 
 	//db := stores.NewMyStore(conf)
 	//login := &SysLogin{
@@ -69,9 +88,5 @@ func main() {
 	//bs, err := json.Marshal(pagedata)
 	//
 	//fmt.Println(string(bs))
-
-	s := `100`
-
-	fmt.Println(math.Calculation(s))
 
 }

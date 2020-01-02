@@ -34,3 +34,12 @@ func NewMSStore(conf *DBStoreConf) *MSStore {
 
 	return &MSStore{DB: db}
 }
+
+func GetSqlStruct(bean interface{}) (*sqlStruct, error) {
+	fs, err := getDBFields(bean)
+	if err != nil {
+		return nil, err
+	}
+
+	return getSqlStruct(fs)
+}

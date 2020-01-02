@@ -24,7 +24,7 @@ func Calculation(expr string) (float64, error) {
 	}
 	ar := ast.ParseExpression()
 	if ast.Err != nil {
-		return 0, errors.New("公司解析错误")
+		return 0, errors.New("公式解析错误")
 	}
 	r := engine.ExprASTResult(ar)
 
