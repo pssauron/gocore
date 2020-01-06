@@ -8,7 +8,11 @@
 package strutils
 
 import (
+	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
 	"encoding/base64"
+	"errors"
 	"regexp"
 	"strings"
 	"unicode"
@@ -129,3 +133,62 @@ func ToCamelCase(str string) string {
 	}
 	return camel
 }
+
+// ============================== AES =======================================
+// =========================AES 秘钥长度必须是 16 或 16 的倍数 ===================
+func PKSC7Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func PKCS7UnPadding(origData []byte) []byte {
+	length := len(origData)
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+
+func AesEncrypt(origDatastr, keystr string) (string, error) {
+
+	for len(keystr)%16 != 0 {
+		keystr += "0"
+	}
+
+	origData := []byte(origDatastr)
+	key := []byte(keystr)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+	blockSize := block.BlockSize()
+	origData = PKSC7Padding(origData, blockSize)
+	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize])
+	crypted := make([]byte, len(origData))
+	blockMode.CryptBlocks(crypted, origData)
+	return base64.StdEncoding.EncodeToString(crypted), nil
+}
+
+func AesDecrypt(cryptedstr, keystr string) (string, error) {
+	for len(keystr)%16 != 0 {
+		keystr += "0"
+	}
+	crypted, err := base64.StdEncoding.DecodeString(cryptedstr)
+	if err != nil {
+		return "", errors.New("Base64 error")
+	}
+	key := []byte(keystr)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+	blockSize := block.BlockSize()
+	blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
+	origData := make([]byte, len(crypted))
+	blockMode.CryptBlocks(origData, crypted)
+	origData = PKCS7UnPadding(origData)
+	return string(origData), nil
+}
+
+// ============================== AES END ===================================

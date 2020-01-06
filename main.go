@@ -10,54 +10,53 @@ package main
 import (
 	"fmt"
 
-	"github.com/pssauron/gocore/stores"
-
 	"github.com/pssauron/gocore/libs"
+	"github.com/pssauron/gocore/utils/strutils"
 )
 
-type SysLogin struct {
-	LoginID   libs.Int    `db:"LoginID" json:"loginId" primary:"true"`
-	UserAcct  libs.String `db:"UserAcct" json:"userAcct"`
-	Mobile    libs.String `db:"Mobile" json:"mobile"`
-	Password  libs.String `db:"Password" json:"password"`
-	RegDate   libs.Time   `db:"RegDate" json:"regDate"`
-	LoginIP   libs.String `db:"LoginIP" json:"loginIp"`
-	LoginTime libs.Time   `db:"LoginTime" json:"loginTime"`
-	DR        libs.Bool   `db:"DR" json:"dr"`
+type SEOrder struct {
+	FBrNo    libs.String `db:"FBrNo"`
+	FInterID libs.Int    `db:"FInterID"`
+	FBillNo  libs.String `db:"FBillNo"`
 }
 
-func (SysLogin) TableName() string {
-	return "SysLogin"
+func (SEOrder) TableName() string {
+	return "SEOrder"
 }
 
 func main() {
 
-	conf := stores.DBStoreConf{
-		IP:       "192.168.3.11",
-		Port:     "1433",
-		User:     "sa",
-		Password: "123",
-		DBName:   "POND",
-	}
+	key := "thikeives"
 
-	db := stores.NewMSStore(&conf)
-
-	stmt, err := db.Preparex(`declare @cid nvarchar(20)
-	exec GetID '','bd','' , @cid OUTPUT
-	select @cid`)
-
-	if err != nil {
-		panic(err)
-	}
-	var id string
-	err = stmt.QueryRow().Scan(&id)
+	str1, err := strutils.AesEncrypt("sa@123", key)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(id)
+	fmt.Println(str1)
 
+	str, err := strutils.AesDecrypt(str1, key)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(str)
+
+	//conf := stores.DBStoreConf{
+	//	IP:       "47.107.101.69",
+	//	Port:     "1433",
+	//	User:     "sa",
+	//	Password: "sa@123",
+	//	DBName:   "AIS201407281401391",
+	//}
+	//
+	//db := stores.NewMSStore(&conf)
+	//orders := make([]SEOrder, 0)
+	//err := db.Select(&orders, "select  * from SEOrder offset 10 rows ")
+	//if err != nil {
+	//	panic(err)
+	//}
 	//db := stores.NewMyStore(conf)
 	//login := &SysLogin{
 	//	LoginID:  libs.NewInt(100058),

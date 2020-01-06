@@ -10,6 +10,7 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo v3.3.10+incompatible // indirect
 	github.com/labstack/gommon v0.3.0 // indirect
+	github.com/pssauron/log4go v0.0.0-20181110101402-4d8ec2bad0a6
 	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 	google.golang.org/appengine v1.6.5 // indirect
 )
