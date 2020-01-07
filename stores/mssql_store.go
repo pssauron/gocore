@@ -157,11 +157,9 @@ func (ms *MSStore) update(tx *sql.Tx, bean interface{}) error {
 			st.args = append(st.args[:idx], st.args[idx+1:])
 			continue
 		}
-		q += item + " = ?"
-		if idx != len(st.cols)-1 {
-			q += ", "
-		}
+		q += item + " = ?,"
 	}
+	q = strings.TrimRight(q, ",")
 
 	q += " WHERE " + st.pcol + " = ?"
 
