@@ -153,6 +153,9 @@ func (ms *MSStore) update(tx *sql.Tx, bean interface{}) error {
 	q := "UPDATE " + getTableName(bean) + "  SET "
 
 	for idx, item := range st.cols {
+		if item == "ts" {
+			continue
+		}
 		q += item + " = ?"
 		if idx != len(st.cols)-1 {
 			q += ", "
