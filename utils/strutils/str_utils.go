@@ -11,7 +11,9 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/md5"
 	"encoding/base64"
+	"encoding/hex"
 	"errors"
 	"regexp"
 	"strings"
@@ -192,3 +194,13 @@ func AesDecrypt(cryptedstr, keystr string) (string, error) {
 }
 
 // ============================== AES END ===================================
+
+// ============================== MD5 Start =================================
+
+func MD5(crypted string) string {
+	h := md5.New()
+	h.Write([]byte(crypted))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+// ================================ MD5 END =================================
