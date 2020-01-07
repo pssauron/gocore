@@ -159,7 +159,7 @@ func (ms *MSStore) update(tx *sql.Tx, bean interface{}) error {
 		}
 	}
 
-	q += " WHERE a." + st.pcol + " = ?"
+	q += " WHERE " + st.pcol + " = ?"
 
 	args := st.args
 
