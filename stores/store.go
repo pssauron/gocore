@@ -137,8 +137,7 @@ func getSqlStruct(fields []field) (*sqlStruct, error) {
 		if item.IsPrimary {
 			ss.pcol = item.Col
 			ss.pval = item.Value
-		}
-		if !item.IsEmpty {
+		} else if !item.IsEmpty {
 			ss.cols = append(ss.cols, item.Col)
 			ss.args = append(ss.args, item.Value)
 		}
