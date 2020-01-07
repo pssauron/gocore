@@ -152,11 +152,8 @@ func (ms *MSStore) update(tx *sql.Tx, bean interface{}) error {
 
 	q := "UPDATE " + getTableName(bean) + "  SET "
 
-	for idx, item := range st.cols {
-		if item == "ts" {
-			st.args = append(st.args[:idx], st.args[idx+1:])
-			continue
-		}
+	for _, item := range st.cols {
+
 		q += item + " = ?,"
 	}
 	q = strings.TrimRight(q, ",")
